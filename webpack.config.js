@@ -76,6 +76,8 @@ if (process.env.NODE_ENV === 'production') {
 	    port: port
 	};
 	
+	config.vue.loaders.css = 'vue-style-loader!css-loader';
+	
 	config.output.publicPath = 'http://localhost:' + port + '/';
 	config.output.filename = '[name].js';
 	
