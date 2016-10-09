@@ -10,6 +10,8 @@
 				<button @click="edit(user)" class="user-control">修改</button>
 				{{user.name}}
 			</p>
+			
+			<Page :current-page="currentPage" :last-page="lastPage" @change-page="changePage"></Page>
 		</div>
 		<form role="form">
 			<h2 class="title">添加用户</h2>
@@ -42,6 +44,8 @@
 </template>
 
 <script> 
+    import Page from '../common/Page';
+
 	var newUser = {
 	    name: '',
 	    pass: ''
@@ -54,13 +58,39 @@
 				users: [],
 				username: '',
 				newUser: Object.assign({}, newUser),
-				editUser: null
-			}
+				editUser: null,
+				lastPage: 1,
+				pageNum: 2,
+				currentPage: 1
+			};
 		},
+//		
+//		computed: {
+//			lastPage() {
+//				return this.$route.query ? 
+//				    +this.$route.query.page : 1;
+//			}
+//		},
 		
 		methods: {
-			fetch() {
-				this.users = JSON.parse(localStorage.getItem('users') || '[]')
+			handleChange(page) {
+				console.log(page);
+			},
+			
+			changePage(page) {
+				this.fetch(page);
+            },
+			
+			fetch(page) {
+				var users = JSON.parse(localStorage.getItem('users') || '[]');
+				
+				this.lastPage = Math.ceil(users.length / this.pageNum);
+				if (page) this.currentPage = page;
+				
+				
+				var start = (this.currentPage - 1) * this.pageNum;
+				var end = (this.currentPage - 1) * this.pageNum + this.pageNum;
+				this.users = users.slice(start, end);
 			},
 			
 			remove(user) {
@@ -70,7 +100,9 @@
 				});
                 localStorage.setItem('users', JSON.stringify(users));
 				
-				this.users = users;
+				this.users = this.users.filter(function (item) {
+                    return item.name !== user.name;
+                });
 			},
 			
 			add() {
@@ -128,7 +160,11 @@
 		
 		ready() {
             this.fetch();
-        }
+        },
+		
+		components: {
+			Page
+		}
 	};
 </script>
 
