@@ -53,6 +53,7 @@ if (process.env.NODE_ENV === 'production') {
 	
 	config.output.publicPath = './dist/';
 	config.output.filename = 'js/[name].[chunkhash:8].js';
+	config.output.chunkFilename = 'js/[name].[chunkhash:8].js';
 	
 	config.vue.loaders.css = ExtractTextPlugin.extract('css');
 	

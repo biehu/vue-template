@@ -12,7 +12,7 @@
                     <input class="form-control" name="username" placeholder="Username" type="text" 
                        v-model="username"
                        v-validate:username="{required: true}">
-                    <p class="error" v-if="$validation.username.required"">required your name!</p>
+                    <p class="error" v-if="$validation.username.required">required your name!</p>
                   </div>
                   <div class="input-group">
                     <input class="form-control" name="password" placeholder="Password" type="password" 
