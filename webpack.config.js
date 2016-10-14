@@ -15,7 +15,7 @@ var config = {
 			{test: /\.js$/, loader: 'babel', exclude: /node_modules/},
 			{test: /\.vue$/, loader: 'vue'},
 			{
-				test: /\.(png|jpe?g|gif)$/, 
+				test: /\.(png|jpe?g|gif|woff2?|eot|ttf|otf)$/, 
 				loader: 'url', 
 			    query: {limit: 10000, name: 'img/[name].[hash:8].[ext]'}
 			}
@@ -25,7 +25,9 @@ var config = {
         extensions: ['', '.js', '.vue']
     },
 	vue: {
-		loaders: {js: 'babel'}
+		loaders: {
+			js: 'babel'
+		}
 	},
 	babel: {
 		presets: ['es2015'],
@@ -59,7 +61,7 @@ if (process.env.NODE_ENV === 'production') {
 	
 	config.plugins.push(
 	    new CleanWebpackPlugin(['dist']),
-	    new ExtractTextPlugin('css/style.[contenthash:8].css'),
+	    new ExtractTextPlugin('css/style.[contenthash:8].css', {allChunks: true}),
 	    new webpack.optimize.CommonsChunkPlugin('vendor', 'js/vendor.[chunkhash:8].js'),
 	    new webpack.optimize.UglifyJsPlugin({
 	        compress: {warnings: false}
@@ -77,10 +79,10 @@ if (process.env.NODE_ENV === 'production') {
 	    port: port
 	};
 	
-	config.vue.loaders.css = 'vue-style-loader!css-loader';
-	
 	config.output.publicPath = 'http://localhost:' + port + '/';
 	config.output.filename = '[name].js';
+	
+	config.vue.loaders.css = 'vue-style-loader!css-loader';
 	
 	config.plugins.push(
         new webpack.HotModuleReplacementPlugin()

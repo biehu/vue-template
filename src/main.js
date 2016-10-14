@@ -12,11 +12,6 @@ Vue.http.options.emulateJSON = true;
 Vue.use(VueValidator);
 
 var router = new Router();
-var view = function (name) {
-    return function(resolve) {
-        require(['./components/' + name + '.vue'], resolve);
-    }
-};
 router.map({
     '/login': {
         name: 'login', 
@@ -31,14 +26,14 @@ router.map({
           require(['./components/Reg.vue'],resolve)
         }
     },
-    '/': {
+    '/content': {
 		name: 'content',
         component: function (resolve) {
           require(['./components/content/Content.vue'],resolve)
         },
         auth: true,
         subRoutes: {
-            '': {
+            '/curd/:page': {
 				name: 'curd',
 				component: function (resolve) {
 		          require(['./components/content/Curd.vue'],resolve)
@@ -54,6 +49,12 @@ router.map({
 	}
 });
 
-
+router.beforeEach(function(transition){
+    if (transition.to.auth && !transition.to.router.app.$data.user) {
+        transition.redirect('/login');
+    } else {
+        transition.next();
+    }
+});
 
 router.start(App, '#app');

@@ -64,34 +64,11 @@
 				currentPage: 1
 			};
 		},
-//		
-//		computed: {
-//			lastPage() {
-//				return this.$route.query ? 
-//				    +this.$route.query.page : 1;
-//			}
-//		},
 		
 		methods: {
-			handleChange(page) {
-				console.log(page);
-			},
-			
 			changePage(page) {
-				this.fetch(page);
+				this.$router.go('/content/curd/' + page);
             },
-			
-			fetch(page) {
-				var users = JSON.parse(localStorage.getItem('users') || '[]');
-				
-				this.lastPage = Math.ceil(users.length / this.pageNum);
-				if (page) this.currentPage = page;
-				
-				
-				var start = (this.currentPage - 1) * this.pageNum;
-				var end = (this.currentPage - 1) * this.pageNum + this.pageNum;
-				this.users = users.slice(start, end);
-			},
 			
 			remove(user) {
 				var users = JSON.parse(localStorage.getItem('users') || '[]');
@@ -158,9 +135,22 @@
 			}
 		},
 		
-		ready() {
-            this.fetch();
-        },
+		route: {
+			data({to}) {
+				var page = +to.params.page || 1;
+				
+				var users = JSON.parse(localStorage.getItem('users') || '[]');
+                
+                this.lastPage = Math.ceil(users.length / this.pageNum);
+                if (page) this.currentPage = page;
+                
+                var start = (this.currentPage - 1) * this.pageNum;
+                var end = (this.currentPage - 1) * this.pageNum + this.pageNum;
+                this.users = users.slice(start, end);
+				
+				
+			}
+		},
 		
 		components: {
 			Page

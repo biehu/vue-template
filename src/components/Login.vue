@@ -62,7 +62,7 @@
 							
 							setCookie('user', 'biehu');
 							
-							this.$router.go('/');
+							this.$router.go('/content/curd/1');
 						} else {
 							this.response = 'user is not right';
 						}
